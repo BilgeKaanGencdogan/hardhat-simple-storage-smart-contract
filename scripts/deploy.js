@@ -2,9 +2,8 @@
 const { ethers, run, network } = require("hardhat")
 //async main func
 async function main() {
-    const SimpleStorageFactory = await ethers.getContractFactory(
-        "SimpleStorage"
-    )
+    const SimpleStorageFactory =
+        await ethers.getContractFactory("SimpleStorage")
     console.log("Deploying contract...")
     const simpleStorage = await SimpleStorageFactory.deploy()
 
