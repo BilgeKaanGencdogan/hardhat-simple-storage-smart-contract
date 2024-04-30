@@ -1,4 +1,6 @@
 const { task } = require("hardhat/config")
+// there is no difference between script and task
+// difference : task is for plugins, scripts are for local development environment
 
 task("block-number", "Prints the current block number").setAction(
     //cost blockTask = async function() => {}
@@ -7,7 +9,7 @@ task("block-number", "Prints the current block number").setAction(
     async (taskArgs, hre) => {
         const blockNumber = await hre.ethers.provider.getBlockNumber()
         console.log(`Current Block Number: ${blockNumber}`)
-    }
+    },
 )
 
-module.exports= {}
+module.exports = {}

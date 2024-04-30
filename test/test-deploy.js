@@ -17,6 +17,7 @@ describe("SimpleStorage", function () {
         // assert
         // expect
         assert.equal(currentValue.toString(), expectedValue)
+        // expect(currentValue.toString()).to.equal(expectedValue)
     })
     it("Should update when we call store", async function () {
         const expectedValue = "7"
@@ -26,4 +27,44 @@ describe("SimpleStorage", function () {
         const currentValue = await simpleStorage.retrieve()
         assert.equal(currentValue.toString(), expectedValue)
     })
+    it("Adding people and their favorite number to Mapping", async function () {
+        const expectedPerson = {
+            name: "Bilge Kaan Gençdoğan",
+            favoriteNumber: "7",
+        }
+
+        // Call the addPerson function
+        await addPerson(expectedPerson.name, expectedPerson.favoriteNumber)
+
+        // Retrieve the favorite number for the added person
+        const favoriteNumber = await simpleStorage.nameToFavoriteNumber(
+            expectedPerson.name,
+        )
+
+        // Assert that the favorite number matches the expected value
+        assert.equal(favoriteNumber.toString(), expectedPerson.favoriteNumber)
+
+        // Retrieve the person's details from the contract
+        const person = await getPerson(expectedPerson.name)
+
+        // Assert that the retrieved person's details match the expected values
+        assert.equal(person.name, expectedPerson.name)
+        assert.equal(
+            person.favoriteNumber.toString(),
+            expectedPerson.favoriteNumber,
+        )
+    })
+
+    // Function to add a person
+    async function addPerson(name, favoriteNumber) {
+        const transaction = await simpleStorage.addPerson(name, favoriteNumber)
+        await transaction.wait()
+        console.log("Person added successfully.")
+    }
+
+    // Function to retrieve a person's details from the contract
+    async function getPerson(name) {
+        const favoriteNumber = await simpleStorage.nameToFavoriteNumber(name)
+        return { name, favoriteNumber }
+    }
 })

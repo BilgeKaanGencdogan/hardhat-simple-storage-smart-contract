@@ -1,7 +1,20 @@
 //imports
+// there is no difference between script and task
+
+// difference : task is for plugins, scripts are for local development environment
 const { ethers, run, network } = require("hardhat")
 //async main func
 async function main() {
+    const nameToFavoriteNumber = {}
+
+    // Struct equivalent
+    class People {
+        constructor(favoriteNumber, name) {
+            this.favoriteNumber = favoriteNumber
+            this.name = name
+        }
+    }
+
     const SimpleStorageFactory =
         await ethers.getContractFactory("SimpleStorage")
     console.log("Deploying contract...")
@@ -34,6 +47,15 @@ async function main() {
     await transactionResponse.wait(1)
     const updatedValue = await simpleStorage.retrieve()
     console.log(`Updated Value: ${updatedValue}`)
+
+    console.log("Adding person...")
+    await addPerson(simpleStorage, "Bilge Kaan Gençdoğan", 7)
+
+    async function addPerson(contract, name, favoriteNumber) {
+        const transaction = await contract.addPerson(name, favoriteNumber)
+        await transaction.wait()
+        console.log("Person added successfully.")
+    }
 }
 
 //async function verify(contractAddress, args) {
